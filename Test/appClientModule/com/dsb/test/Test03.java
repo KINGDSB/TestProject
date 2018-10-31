@@ -31,25 +31,35 @@ public class Test03 {
 	
 	public static void main(String[] args) {
 		
-		Entity e = new Entity();
-		System.out.println(e.getI());
+//		Entity e = new Entity();
+//		System.out.println(e.getI());
+//		
+//		String str1 ="How are you "; 
+//		String str2 ="you are How  "; 
+//		String str3 ="Qou are How  "; 
+//		boolean result =  matchString(str1, str2);
+//		System.out.println(result);
+//		
+//
+//		System.out.println(matchString1(str1,str2));
+//		System.out.println(matchString1(str3,str2));
+//		
+//
+//		String str4 ="a a b"; 
+//		String str5 ="a b"; 
+//		
+//		System.out.println(matchString1(str4,str5));
 		
-		String str1 ="How are you "; 
-		String str2 ="you are How  "; 
-		String str3 ="Qou are How  "; 
-		boolean result =  matchString(str1, str2);
-		System.out.println(result);
+	    
+	    int a = 10 >> 1; // a=5
+		int b = a++; // a=7 b=5
+		int c = ++a; // c=7 a=7
+		int d = b * a++; // a=8 d=35
 		
-
-		System.out.println(matchString1(str1,str2));
-		System.out.println(matchString1(str3,str2));
-		
-
-		String str4 ="a a b"; 
-		String str5 ="a b"; 
-		
-		System.out.println(matchString1(str4,str5));
-		
+		System.out.println(a);
+		System.out.println(b);
+		System.out.println(c);
+		System.out.println(d);
 		
 	}
 
