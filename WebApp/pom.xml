@@ -272,8 +272,21 @@
             <artifactId>core</artifactId>
             <version>3.3.0</version>
         </dependency>
-        
 
+        <dependency>
+            <groupId>e-iceblue</groupId>
+            <artifactId>Spire.Common</artifactId>
+            <version>1.3.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/Spire.Common.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>e-iceblue</groupId>
+            <artifactId>Spire.BarCode</artifactId>
+            <version>1.3.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/Spire.Barcode.jar</systemPath>
+        </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
