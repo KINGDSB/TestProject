@@ -5,14 +5,19 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+
+import com.dsb.entity.MsgObject;
+import com.dsb.entity.MsgObject2;
 
 /**
  * There is no royal road to learning.
@@ -22,7 +27,7 @@ import org.springframework.beans.BeanWrapperImpl;
 public class ObjectUtils {
     /**
      * 将目标源中不为空的字段过滤，将数据库中查出的数据源复制到提交的目标源中
-     *
+     * (把 source 的值copy到target为null的属性上)
      * @param source 用id从数据库中查出来的数据源
      * @param target 提交的实体，目标源
      */
@@ -31,19 +36,30 @@ public class ObjectUtils {
     }
 
     /**
+     * 将 source 中不为null的值copy到 target 中
+     * @param source
+     * @param target
+     */
+    public static void copyNotNullProperties(Object source, Object target) {
+        BeanUtils.copyProperties(source, target, getNullProperties(source));
+    }
+
+    /**
      * @param target 目标源数据
      * @return 将目标源中不为空的字段取出
      */
     private static String[] getNoNullProperties(Object target) {
         BeanWrapper srcBean = new BeanWrapperImpl(target);
-        PropertyDescriptor[] pds = srcBean.getPropertyDescriptors();
-        Set<String> noEmptyName = new HashSet<>();
-        for (PropertyDescriptor p : pds) {
-            Object value = srcBean.getPropertyValue(p.getName());
-            if (value != null) noEmptyName.add(p.getName());
-        }
-        String[] result = new String[noEmptyName.size()];
-        return noEmptyName.toArray(result);
+        return Arrays.stream(srcBean.getPropertyDescriptors()).filter(p -> srcBean.getPropertyValue(p.getName()) != null).map(PropertyDescriptor::getName).collect(Collectors.toSet()).toArray(new String[0]);
+    }
+
+    /**
+     * @param target 目标源数据
+     * @return 将目标源中为空的字段取出
+     */
+    private static String[] getNullProperties(Object target) {
+        BeanWrapper srcBean = new BeanWrapperImpl(target);
+        return Arrays.stream(srcBean.getPropertyDescriptors()).filter(p -> srcBean.getPropertyValue(p.getName()) == null).map(PropertyDescriptor::getName).collect(Collectors.toSet()).toArray(new String[0]);
     }
     
     /**
@@ -109,4 +125,21 @@ public class ObjectUtils {
     public static <T> T forceChange(Object value) {
         return (T)value;
     }
+    
+    public static void main(String[] args) {
+        MsgObject m1 = new MsgObject();
+        m1.setId(1);
+//        
+//        MsgObject2 m2 = new MsgObject2();
+////        BeanUtils.copyProperties(m1, m2);
+//        copyNotNullProperties(m1, m2);
+//        
+//        System.out.println(m2);
+        
+        
+        String[] props = getNullProperties(m1);
+        System.out.println(props);
+        
+    }
+    
 }
