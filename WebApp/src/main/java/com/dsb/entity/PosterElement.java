@@ -2,8 +2,6 @@ package com.dsb.entity;
 
 import java.math.BigDecimal;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.Data;
 
 /**
@@ -59,10 +57,4 @@ public class PosterElement {
     /** 是否换行 **/
     private boolean breakWord;
 
-    /** 行距 **/
-    private Integer lineHeight;
-
-    /** 最大行数 **/
-    @JsonProperty("MaxLineNumber")
-    private int maxLineNumber;
 }
