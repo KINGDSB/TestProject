@@ -29,7 +29,7 @@ public class PosterElement {
     /** 文字换行宽度 或者是 图片的宽度 */
     private BigDecimal width;
 
-    /** 字数限制
+    /** 单行字数限制
      * 促销海报背面商品名称字数限制 */
     private Integer textLineLimit;
 
