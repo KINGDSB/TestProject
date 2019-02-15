@@ -193,6 +193,10 @@ public class ImgUtil {
 //                    Font font = new Font(element.getFontName(), fontStyle, element.getFontSize());
                     
 //                    Font font = Font.createFont(Font.PLAIN, new File("‪E:\\msyh.ttc"));
+
+                    // 用 maven 打成jar包后发布到linux环境时 须这样获取字体文件
+//                    Font defaultFont = Font.createFont(Font.TRUETYPE_FONT, ImgUtil.class.getResourceAsStream("/font/msyh.ttc"));
+                    
                     Font font = Font.createFont(Font.PLAIN, new BufferedInputStream(new FileInputStream("E:\\msyh.ttc")));
 //                    Font font = Font.createFont(Font.PLAIN, getStreamByUrl("http://yyt.lexin580.com:8081/yddzb_font/msyh.ttc"));
                     font = font.deriveFont(fontStyle, new Float(element.getFontSize()));
