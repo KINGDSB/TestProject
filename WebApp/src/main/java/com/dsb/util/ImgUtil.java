@@ -8,7 +8,10 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -24,9 +27,14 @@ import java.net.URL;
 import java.text.AttributedString;
 import java.text.ParseException;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageTypeSpecifier;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
 import javax.servlet.http.HttpServletResponse;
 import javax.swing.ImageIcon;
 
@@ -387,5 +395,102 @@ public class ImgUtil {
             System.out.println(font);
         }
         System.out.println("系统字体数:" + fontCount);
+    }
+
+    /**
+     * @Title: compressPicByQuality 
+     * @Description: 压缩图片,通过压缩图片质量，保持原图大小
+     * @param quality：0-1 
+     * @return byte[] 
+     * @throws
+     */
+    public static byte[] compressPicByQuality(byte[] imgByte, float quality) {
+        byte[] inByte = null;
+        try {
+            ByteArrayInputStream byteInput = new ByteArrayInputStream(imgByte);
+            BufferedImage image = ImageIO.read(byteInput);
+
+            // 如果图片空，返回空
+            if (image == null) {
+                return null;
+            }
+            // 得到指定Format图片的writer
+            Iterator<ImageWriter> iter = ImageIO.getImageWritersByFormatName("jpeg");// 得到迭代器
+            ImageWriter writer = (ImageWriter) iter.next(); // 得到writer
+
+            // 得到指定writer的输出参数设置(ImageWriteParam )
+            ImageWriteParam iwp = writer.getDefaultWriteParam();
+            iwp.setCompressionMode(ImageWriteParam.MODE_EXPLICIT); // 设置可否压缩
+            iwp.setCompressionQuality(quality); // 设置压缩质量参数
+
+            iwp.setProgressiveMode(ImageWriteParam.MODE_DISABLED);
+
+            ColorModel colorModel = ColorModel.getRGBdefault();
+            // 指定压缩时使用的色彩模式
+            iwp.setDestinationType(
+                    new javax.imageio.ImageTypeSpecifier(colorModel, colorModel.createCompatibleSampleModel(16, 16)));
+
+            // 开始打包图片，写入byte[]
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(); // 取得内存输出流
+            IIOImage iIamge = new IIOImage(image, null, null);
+
+            // 此处因为ImageWriter中用来接收write信息的output要求必须是ImageOutput
+            // 通过ImageIo中的静态方法，得到byteArrayOutputStream的ImageOutput
+            writer.setOutput(ImageIO.createImageOutputStream(byteArrayOutputStream));
+            writer.write(null, iIamge, iwp);
+            inByte = byteArrayOutputStream.toByteArray();
+        } catch (IOException e) {
+            System.out.println("write errro");
+            e.printStackTrace();
+        }
+        return inByte;
+    }
+    
+    /**
+     * @Title compressPicByQuality 
+     * @Description: 压缩图片,通过压缩图片质量，保持原图大小
+     * @param image
+     * @param size 
+     * @return
+     */
+    public static BufferedImage compressPicByQuality(BufferedImage image, int size) {
+        try {
+            // 如果图片空，返回空
+            if (image == null) {
+                return null;
+            }
+            // 得到指定Format图片的writer
+            Iterator<ImageWriter> iter = ImageIO.getImageWritersByFormatName("jpeg");// 得到迭代器
+            ImageWriter writer = (ImageWriter) iter.next(); // 得到writer
+
+            // 得到指定writer的输出参数设置(ImageWriteParam )
+            ImageWriteParam iwp = writer.getDefaultWriteParam();
+            iwp.setCompressionMode(ImageWriteParam.MODE_EXPLICIT); // 设置可否压缩
+            iwp.setCompressionQuality(0.9F); // 设置压缩质量参数
+
+            iwp.setProgressiveMode(ImageWriteParam.MODE_DISABLED);
+
+            ColorModel colorModel = ColorModel.getRGBdefault();
+            // 指定压缩时使用的色彩模式
+            iwp.setDestinationType(new ImageTypeSpecifier(colorModel, colorModel.createCompatibleSampleModel(16, 16)));
+
+            // 开始打包图片，写入byte[]
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(); // 取得内存输出流
+            IIOImage iIamge = new IIOImage(image, null, null);
+
+            // 此处因为ImageWriter中用来接收write信息的output要求必须是ImageOutput
+            // 通过ImageIo中的静态方法，得到byteArrayOutputStream的ImageOutput
+            writer.setOutput(ImageIO.createImageOutputStream(byteArrayOutputStream));
+            writer.write(null, iIamge, iwp);
+
+            byte[] bytes = byteArrayOutputStream.toByteArray();
+            BufferedImage tmp = ImageIO.read(new ByteArrayInputStream(bytes));
+            
+            return bytes.length>size?compressPicByQuality(tmp, size):tmp;
+        } catch (IOException e) {
+            System.out.println("write errro");
+            e.printStackTrace();
+        }
+        return null;
     }
 }
