@@ -12,4 +12,10 @@ public class LambdaUtils {
         System.out.println(func.apply(num));
     }
     
+
+    public static String redisGet(String key, Function<String, String> func) {
+        // return RedisUtils.get(key);
+        return key;
+    }
+    
 }
