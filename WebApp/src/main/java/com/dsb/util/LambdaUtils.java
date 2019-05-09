@@ -5,11 +5,22 @@ import java.util.function.Function;
 public class LambdaUtils {
 
     public static void main(String[] args) throws Exception {
-        execute(a -> String.valueOf(a + 1), 10);
+        Integer i = 1;
+        execute(a -> {
+            System.out.println("execute 1" + a);
+            String.valueOf(a + i);
+            return String.valueOf(a + i);
+        }, 1, 11);
     }
 
-    public static void execute(Function<Integer, String> func, int num) {
-        System.out.println(func.apply(num));
+    public static void execute(Function<Integer, String> func, int num, int num2) {
+        System.out.println("execute 01" + num);
+        if (10 == num) {
+            System.out.println(" execute execute");
+            System.out.println(func.apply(num2));
+        } else {
+            System.out.println(" not execute execute");
+        }
     }
     
 
