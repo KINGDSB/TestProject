@@ -11,10 +11,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class DBUtil<T> {
 	
@@ -337,5 +339,68 @@ public class DBUtil<T> {
 //			}
 //		}
 //	}
+	
+
+    public static <T> void getBeanFromMap(Class<T> clazz) {
+        System.out.println(clazz);
+    }
+	public static <T> void main(String[] args) {
+	    String key = "xxj_member_id_mem_mem_mem_mem_member_er_er_er_er_id_member_id_member_id_member_id_member_id_member_id_member_id_member_id_member_id";
+	    long l1 = System.currentTimeMillis();
+	    System.out.println(l1);
+        System.out.println(filed2SetName1(key));
+        long l2 = System.currentTimeMillis();
+        System.out.println(l2-l1);
+        System.out.println(filed2SetName2(key));
+        long l3 = System.currentTimeMillis();
+        System.out.println(l3-l2);
+    }
+
+    /**
+     * @Title filed2SetName 
+     * @Description 数据库的字段名(带下划线)转javabean 方法名
+     * @param field
+     * @return
+     */
+    public static String filed2SetName1(String fields) {
+        StringBuilder sbuilder = new StringBuilder("set");
+        Arrays.stream(fields.split("_")).forEach(field -> {
+            char[] cs = field.toCharArray();
+            cs[0] -= 32;
+            sbuilder.append(String.valueOf(cs));
+        });
+        return sbuilder.toString();
+    }
+
+    /**
+     * @Title filed2SetName 
+     * @Description 数据库的字段名(带下划线)转javabean 方法名
+     * @param field
+     * @return
+     */
+    public static String filed2SetName2(String fields) {
+        return "set"+Arrays.stream(fields.split("_")).map(field -> {
+            char[] cs = field.toCharArray();
+            cs[0] -= 32;
+            return String.valueOf(cs);
+        }).collect(Collectors.joining());
+    }
+
+    /**
+     * @Title changeToJavaFiled 
+     * @Description (将数据库中带下划线的字段转换为Java常用的驼峰字段) 
+     * @param field
+     * @return
+     */
+    public static String changeToJavaFiled(String field) {
+        String[] fields = field.split("_");
+        StringBuilder sbuilder = new StringBuilder(fields[0]);
+        for (int i = 1; i < fields.length; i++) {
+            char[] cs = fields[i].toCharArray();
+            cs[0] -= 32;
+            sbuilder.append(String.valueOf(cs));
+        }
+        return sbuilder.toString();
+    }
 
 }
