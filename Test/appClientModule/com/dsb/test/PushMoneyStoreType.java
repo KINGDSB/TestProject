@@ -3,6 +3,7 @@ package com.dsb.test;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -38,12 +39,18 @@ public class PushMoneyStoreType implements Serializable {
     private Integer isDelete;
     
     public static void main(String[] args) {
-        List<PushMoneyStoreType> list = new ArrayList<PushMoneyStoreType>(){{
-            add(new PushMoneyStoreType(BigDecimal.ZERO, BigDecimal.valueOf(99.00), BigDecimal.valueOf(1.00)));
-            add(new PushMoneyStoreType(BigDecimal.valueOf(100.00), BigDecimal.valueOf(199.00), BigDecimal.valueOf(2.00)));
-            add(new PushMoneyStoreType(BigDecimal.valueOf(200.00), BigDecimal.valueOf(399.00), BigDecimal.valueOf(3.00)));
-        }};
-        System.out.println(getMoneyByLimit(BigDecimal.valueOf(37196.42), BigDecimal.valueOf(37196.42), list, 1));
+//        List<PushMoneyStoreType> list = new ArrayList<PushMoneyStoreType>(){{
+//            add(new PushMoneyStoreType(BigDecimal.ZERO, BigDecimal.valueOf(99.00), BigDecimal.valueOf(1.00)));
+//            add(new PushMoneyStoreType(BigDecimal.valueOf(100.00), BigDecimal.valueOf(199.00), BigDecimal.valueOf(2.00)));
+//            add(new PushMoneyStoreType(BigDecimal.valueOf(200.00), BigDecimal.valueOf(399.00), BigDecimal.valueOf(3.00)));
+//        }};
+//        System.out.println(getMoneyByLimit(BigDecimal.valueOf(37196.42), BigDecimal.valueOf(37196.42), list, 1));
+        System.out.println(Arrays.stream(new int[]{1,12,3,41}).filter(num -> m1(num)).findAny().orElse(0));
+    }
+    
+    public static boolean m1(int n1) {
+        System.out.println(n1);
+        return n1>10;
     }
     
     private static BigDecimal getMoneyByLimit(BigDecimal number1, BigDecimal number2, List<PushMoneyStoreType> pushMoneyStoreTypes, Integer type) {
