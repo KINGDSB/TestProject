@@ -75,5 +75,6 @@ public class LeetCode {
         return prev;
     }
     public static ListNode reverseListIterative2(ListNode head) {
+		return null;
     }
 }
